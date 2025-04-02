@@ -45,10 +45,10 @@
     </style>
 </head>
 
-<body>
+<body class="">
 
     <div class="container">
-        <!-- Formulário de Cadastro de Voluntário -->
+        
         <!-- Formulário de Cadastro de Projeto -->
         <div class="row justify-content-center">
             <div class="col-md-6 form-container">
