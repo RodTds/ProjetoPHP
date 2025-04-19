@@ -1,0 +1,40 @@
+CREATE SCHEMA IF NOT EXISTS `projetophp` DEFAULT CHARACTER SET utf8 ;
+USE `projetophp` ;
+
+-- -----------------------------------------------------
+-- Table `projetophp`.`usuarios`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `usuarios` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(150) NOT NULL,
+  `senha` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS `categoria` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(255) NOT NULL,
+  `descricao` VARCHAR(255) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `bancophp`.`produto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `produto` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(255) NULL,
+  `descricao` VARCHAR(255) NULL,
+  `preco` DECIMAL(8,2) NULL,
+  `categoria_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_produto_categoria_idx` (`categoria_id` ASC),
+  CONSTRAINT `fk_produto_categoria`
+    FOREIGN KEY (`categoria_id`)
+    REFERENCES `categoria` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
