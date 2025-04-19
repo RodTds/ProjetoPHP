@@ -1,87 +1,60 @@
 <?php
-  require_once("cabecalho.php");
+require_once("cabecalho.php");
+function retornaVoluntarios()
+{
+  require('conexao.php');
+  try {
+    $sql = "SELECT * FROM voluntarios"; // 
+    $stmt = $pdo->query($sql);
+    return $stmt->fetchAll(); // pega toso registro do banco de dados e retorna como array
+
+  } catch (Exception $th) {
+    die("Erro ao consultar categorias: " . $th->getMessage());
+  }
+}
+$voluntarios = retornaVoluntarios(); // variavel recebe o retorno da função que sao todos registro da tabela categorias
 ?>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulário de Cadastro</title>
-  <!-- Link para o CSS do Bootstrap -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    /* Remover qualquer padding ou margem do body */
-    body {
-      background-color: #f8f9fa;
-     
-    }
- 
-    /* Container para o formulário */
-    .form-container {
-      
-      background-color: white;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      padding: 30px;
-      border-radius: 8px;
-      margin-top: 80px;  /* Ajuste para que o conteúdo fique abaixo do cabeçalho fixo */
-    }
-
-    .form-container h2 {
-      margin-bottom: 20px;
-    }
-
-    .form-control {
-      border-radius: 5px;
-    }
-
-    .btn-custom {
-      background-color: #007bff;
-      color: white;
-      border-radius: 5px;
-    }
-
-    .btn-custom:hover {
-      background-color: #0056b3;
-    }
-  </style>
-</head>
-
-<body>
-
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-6 form-container">
-        <h2 class="text-center">Cadastro Voluntário</h2>
-        <form action="" method="POST">
-          <div class="form-group">
-            <label for="codigo_voluntario">Código Voluntário</label>
-            <input type="text" class="form-control" id="codigo_voluntario" name="codigo_voluntario" required>
-          </div>
-          <div class="form-group">
-            <label for="nome">Nome</label>
-            <input type="text" class="form-control" id="nome" name="nome" required>
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required>
-          </div>
-          <div class="form-group">
-            <label for="telefone">Telefone</label>
-            <input type="tel" class="form-control" id="telefone" name="telefone" required>
-          </div>
-          <button type="submit" class="btn btn-custom btn-block">Cadastrar</button>
-        </form>
-      </div>
-    </div>
+<h2>Voluntarios</h2>
+<div class="d-flex justify-content-between mb-3">
+  <div>
+    <a href="novo_voluntario.php" class="btn btn-primary me-2">Novo Registro</a>
+    <a href="principal.php" class="btn btn-secondary">Voltar</a>
   </div>
+  <div class="ms-auto">
+    <a href="pesquisar_voluntario.php" class="btn btn-primary">Pesquisar</a>
+  </div>
+</div>
 
-  <!-- Scripts do Bootstrap -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-</body>
-</html>
+<table class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Email</th>
+      <th>Telefone</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php
+        foreach ($voluntarios as $c): // per
+      ?>
+      <tr>
+        <td><?= $c['id'] ?></td>
+        <td><?= $c['nome'] ?></td>
+        <td><?= $c['email'] ?></td>
+        <td><?= $c['telefone'] ?></td>
+        <td>
+          <a href="alterar_voluntario.php?id=<?= $c['id'] ?>" class="btn btn-warning">Editar</a>
+          <a href="" class="btn btn-danger">Deletar</a>
+        </td>
+      </tr>
+      <?php
+    endforeach;
+    ?>
+  </tbody>
+</table>
 
 <?php
-  require_once("rodape.php");
+require_once("rodape.php");
 ?>

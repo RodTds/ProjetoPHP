@@ -1,89 +1,57 @@
 <?php
-  require_once("cabecalho.php");
+require_once("cabecalho.php");
+function retornaProjetos()
+{
+  require('conexao.php');
+  try {
+    $sql = "SELECT * FROM projetos"; // 
+    $stmt = $pdo->query($sql);
+    return $stmt->fetchAll(); // pega toso registro do banco de dados e retorna como array
+
+  } catch (Exception $th) {
+    die("Erro ao consultar categorias: " . $th->getMessage());
+  }
+}
+$projetos = retornaProjetos(); // variavel recebe o retorno da função que sao todos registro da tabela categorias
 ?>
-<!DOCTYPE html>
-<html lang="pt-br">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulários de Cadastro</title>
-    <!-- Link para o CSS do Bootstrap -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        /* Adicionando o estilo para o fundo branco e leve relevo */
-        body {
-            background-color: #f8f9fa;
-         
-        }
+<h2>Projetos</h2>
+<div class="d-flex justify-content-between mb-3">
+<a href="novo_projeto.php" class="btn btn-success mb-3">Novo Registro</a>
+<div class="ms-auto">
+  <a href="pesquisar_projeto.php" class="btn btn-primary">Pesquisar</a>
+</div>
+</div>
+<table class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Descrição</th>
+      <th>Início</th>
+      <th>Fim</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php
+    foreach ($projetos as $c): // per
+    ?>
+      <tr>
+        <td><?= $c['id'] ?></td>
+        <td><?= $c['descricao'] ?></td>
+        <td><?= $c['inicio'] ?></td>
+        <td><?= $c['fim'] ?></td>
+        <td>
+          <a href="#" class="btn btn-warning">Editar</a>
+          <a href="" class="btn btn-danger">Deletar</a>
+        </td>
+      </tr>
+    <?php
+    endforeach;
+    ?>
+  </tbody>
+</table>
 
-        .form-container {
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-
-        .form-container h2 {
-            margin-bottom: 20px;
-        }
-
-        .form-control {
-            border-radius: 5px;
-        }
-
-        .btn-custom {
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-        }
-
-        .btn-custom:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-
-<body class="">
-
-    <div class="container">
-        
-        <!-- Formulário de Cadastro de Projeto -->
-        <div class="row justify-content-center">
-            <div class="col-md-6 form-container">
-                <h2 class="text-center">Cadastro de Projeto</h2>
-                <form action="processar_projeto.php" method="POST">
-                    <div class="form-group">
-                        <label for="codigo_projeto">Código do Projeto</label>
-                        <input type="text" class="form-control" id="codigo_projeto" name="codigo_projeto" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="nome_projeto">Nome do Projeto</label>
-                        <input type="text" class="form-control" id="nome_projeto" name="nome_projeto" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="data_inicio">Data de Início</label>
-                        <input type="date" class="form-control" id="data_inicio" name="data_inicio" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="data_fim">Data de Fim</label>
-                        <input type="date" class="form-control" id="data_fim" name="data_fim" required>
-                    </div>
-                    <button type="submit" class="btn btn-custom btn-block">Cadastrar Projeto</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scripts do Bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-
-</html>
 
 <?php
-  require_once("rodape.php");
+require_once("rodape.php");
 ?>

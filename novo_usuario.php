@@ -1,59 +1,90 @@
 <?php
-   require_once("conexao.php");
-   if($_SERVER['REQUEST_METHOD'] == "POST"){
-    try {
-        $nome = $_POST['nome'];
-        $email =$_POST['email'];
-        $senha = password_hash( $_POST['senha'],PASSWORD_BCRYPT);// CRIPTOGRAFANDO A SENHA
-        // variavel staitmant   stmt
-        $stmt = $pdo->prepare("INSERT INTO usuarios(nome,email,senha) values(?,?,?)") ;
-   
-       if( $stmt->execute([$nome,$email,$senha])){
-          echo"<p>Usuario Inserido com sucesso</p>";
-          header("location: index.php?cadastro=true");
-       }else{
-         echo "Erro ao inserir usuario";
-       }
-           
+require_once("conexao.php");
+$mensagem = ""; // mensagem padrão
 
-    } catch (Exception $e) {
-        echo"Erro ao inserir usuario".$e->getMessage();
+if ($_SERVER['REQUEST_METHOD'] === "POST") {
+    $nome = $_POST['nome'];
+    $email = $_POST['email'];
+    $senha = password_hash($_POST['senha'], PASSWORD_BCRYPT);
+
+    try {
+        // Verifica se o email já existe
+        $verifica = $pdo->prepare("SELECT COUNT(*) FROM usuarios WHERE email = ?");
+        $verifica->execute([$email]);
+        $existe = $verifica->fetchColumn();
+
+        if ($existe > 0) {
+            $mensagem = "<div class='alert alert-warning mt-3'>Este e-mail já está cadastrado.</div>";
+        } else {
+            $stmt = $pdo->prepare("INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)");
+            $stmt->execute([$nome, $email, $senha]);
+
+            if ($stmt->rowCount() > 0) {
+                $mensagem = "<div class='alert alert-success mt-3'>Usuário cadastrado com sucesso!</div>";
+            } else {
+                $mensagem = "<div class='alert alert-danger mt-3'>Erro ao cadastrar usuário.</div>";
+            }
+        }
+    } catch (PDOException $e) {
+        if ($e->getCode() == 23000) {
+            $mensagem = "<div class='alert alert-danger mt-3'>E-mail já está em uso. (Erro 23000)</div>";
+        } else {
+            $mensagem = "<div class='alert alert-danger mt-3'>Erro: " . $e->getMessage() . "</div>";
+        }
     }
-   }
+}
 ?>
 
 <!doctype html>
-<html lang="en">
+<html lang="pt-br">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>novo usuario</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Novo Usuário</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      body {
+        background-color: #f0f2f5;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .form-box {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 500px;
+      }
+    </style>
   </head>
   <body>
-    <main class="container">
-    <h1>Novo Usuario!</h1>
-    
-        <form method="post" >
-                        
-                        <div class="mb-3">
-                            <label for="nome" class="form-label">Informe o Nome</label>
-                            <input type="text" id="nome" name="nome" class="form-control" required="">
-                        </div>
-                    
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Informe o Email</label>
-                            <input type="text" id="email" name="email" class="form-control" required="">
-                        </div>
-                    
-                        <div class="mb-3">
-                            <label for="senha" class="form-label">Informe a Senha</label>
-                            <input type="text" id="senha" name="senha" class="form-control" required="">
-                        </div>
-                    
-                    <button type="submit" class="btn btn-primary">Enviar</button>
-        </form>      
-     </main>      
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+ 
+    <div class="form-box">
+      <h2 class="text-center mb-4">Novo Usuário</h2>
+      <?= $mensagem ?>
+      <form method="post">
+        <div class="mb-3">
+          <label for="nome" class="form-label">Informe o Nome</label>
+          <input type="text" id="nome" name="nome" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Informe o Email</label>
+          <input type="email" id="email" name="email" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label for="senha" class="form-label">Informe a Senha</label>
+          <input type="password" id="senha" name="senha" class="form-control" required>
+        </div>
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-primary">Enviar</button>
+          <a href="index.php" class="btn btn-danger">Cancelar</a>
+        </div>
+      </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
