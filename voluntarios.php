@@ -4,7 +4,7 @@ function retornaVoluntarios()
 {
   require('conexao.php');
   try {
-    $sql = "SELECT * FROM voluntarios"; // 
+    $sql = "SELECT * FROM voluntarios order by nome "; // 
     $stmt = $pdo->query($sql);
     return $stmt->fetchAll(); // pega toso registro do banco de dados e retorna como array
 

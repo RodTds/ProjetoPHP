@@ -60,7 +60,7 @@ $voluntario = retornaDadosVoluntario();
                     Nenhuma alteração foi realizada.
                 </div>
             <?php endif; ?>
-            
+
             <form method="POST">
                 <div class="mb-3">
                     <label for="nome" class="form-label">Nome do Voluntário</label>
@@ -107,7 +107,6 @@ $voluntario = retornaDadosVoluntario();
                     <a href="voluntarios.php" class="btn btn-danger">Cancelar</a>
                 </div>
             </form>
-
         </div>
     </div>
 </div>

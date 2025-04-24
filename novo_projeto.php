@@ -44,7 +44,24 @@
         }
     </style>
 </head>
-
+<?php
+    require('conexao.php');
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        try {
+            $nome = $_POST['nome'];
+            $descricao = $_POST['descricao'];
+            $inicio =$_POST['inicio'];
+            $fim =$_POST['fim'];
+            $stmt = $pdo->prepare("INSERT INTO projetos(nome,descricao,inicio,fim) VALUES(?,?,?,?)");
+            if($stmt->execute([$nome,$descricao,$inicio,$fim]))
+               echo"Projeto Cadastrado Com Sucesso !";
+            else
+               echo "!! ATEÇÃO !! Cadastro Não Realizado !!";
+        } catch (\Throwable $th) {
+            echo"Erro ao Cadastrar Projeto". $th->getMessage();
+        }
+    }
+?>
 <body class="">
 
     <div class="container">
@@ -53,24 +70,24 @@
         <div class="row justify-content-center">
             <div class="col-md-6 form-container">
                 <h2 class="text-center">Cadastro de Projeto</h2>
-                <form action="processar_projeto.php" method="POST">
+                <form action="" method="POST">
                     <div class="form-group">
-                        <label for="codigo_projeto">Código do Projeto</label>
-                        <input type="text" class="form-control" id="codigo_projeto" name="codigo_projeto" required>
+                        <label for="nome">Nome do Projeto</label>
+                        <input type="text" class="form-control" id="nome" name="nome" required>
                     </div>
                     <div class="form-group">
-                        <label for="nome_projeto">Nome do Projeto</label>
-                        <input type="text" class="form-control" id="nome_projeto" name="nome_projeto" required>
+                        <label for="descricao">Descrição</label>
+                        <input type="text" class="form-control" id="descricao" name="descricao" required>
                     </div>
                     <div class="form-group">
-                        <label for="data_inicio">Data de Início</label>
-                        <input type="date" class="form-control" id="data_inicio" name="data_inicio" required>
+                        <label for="inicio">Data de Início</label>
+                        <input type="date" class="form-control" id="inicio" name="inicio" required>
                     </div>
                     <div class="form-group">
-                        <label for="data_fim">Data de Fim</label>
-                        <input type="date" class="form-control" id="data_fim" name="data_fim" required>
+                        <label for="fim">Data de Fim</label>
+                        <input type="date" class="form-control" id="fim" name="fim" required>
                     </div>
-                    <button type="submit" class="btn btn-custom btn-block">Cadastrar Projeto</button>
+                    <button type="submit" class="btn btn-custom btn-block">Salvar Projeto</button>
                 </form>
             </div>
         </div>

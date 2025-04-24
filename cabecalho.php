@@ -73,8 +73,8 @@ if (!$_SESSION['acesso']) {
                             AGENDA
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="agenda.php">Ver Agenda</a></li>
-                            <li><a class="dropdown-item" href="nova_agenda.php">Novo Evento</a></li>
+                            <li><a class="dropdown-item" href="agenda.php">Listar Agendamentos</a></li>
+                            <li><a class="dropdown-item" href="novo_agendamento.php">Novo Agendamento</a></li>
                         </ul>
                     </li>
                         <!--SweetAlert-->

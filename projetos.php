@@ -26,9 +26,10 @@ $projetos = retornaProjetos(); // variavel recebe o retorno da função que sao 
   <thead>
     <tr>
       <th>ID</th>
-      <th>Descrição</th>
-      <th>Início</th>
-      <th>Fim</th>
+      <th>NOME</th>
+      <th>DESCRIÇÂO</th>
+      <th>INÍCIO</th>
+      <th>FIM</th>
     </tr>
   </thead>
   <tbody>
@@ -37,11 +38,12 @@ $projetos = retornaProjetos(); // variavel recebe o retorno da função que sao 
     ?>
       <tr>
         <td><?= $c['id'] ?></td>
+        <td><?= $c['nome'] ?></td>
         <td><?= $c['descricao'] ?></td>
-        <td><?= $c['inicio'] ?></td>
-        <td><?= $c['fim'] ?></td>
+        <td><?= $data_formatada = (new DateTime($c['inicio']))->format('d/m/Y') ?></td>
+        <td><?= $data_formatada = (new DateTime($c['fim']))->format('d/m/Y') ?></td>
         <td>
-          <a href="#" class="btn btn-warning">Editar</a>
+          <a href="alterar_projeto.php?id=<?= $c['id'] ?>"class="btn btn-warning">Editar</a>
           <a href="" class="btn btn-danger">Deletar</a>
         </td>
       </tr>
