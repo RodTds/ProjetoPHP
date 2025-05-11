@@ -21,23 +21,6 @@ function exibirAtividades()
     }
 }
 
-function alterarProjeto($id, $nome, $descricao, $inicio, $fim)
-{
-    require("conexao.php");
-    try {
-
-        $sql = "UPDATE projetos SET nome = ?, descricao = ?,inicio = ?, fim = ? WHERE id = ?";
-        $stmt = $pdo->prepare($sql);
-
-        if ($stmt->execute([$nome, $descricao, $inicio, $fim, $id]))
-            return true;
-        else
-            return false;
-    } catch (Exception $e) {
-        die("Erro ao alterar dados do Voluntário" . $e->getMessage());
-    }
-}
-
 $atividades = exibirAtividades();
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
@@ -80,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 <td><?= $data_formatada = (new DateTime($c['fim']))->format('d/m/Y') ?></td>
                 <td>
                     <a href="alterar_atividade.php?id=<?= $c['idAtividade'] ?>" class="btn btn-warning">Editar</a>
-                    <a href="" class="btn btn-danger">Deletar</a>
+                    <a href="deletar_atividade.php?id=<?= $c['idAtividade']?>" class="btn btn-danger">Deletar</a>
                 </td>
             </tr>
         <?php

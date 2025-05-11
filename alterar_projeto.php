@@ -52,11 +52,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         <div class="col-md-8 bg-white rounded-4 shadow p-5">
 
             <h3 class="mb-4 text-center">Alteração de Dados do Projeto</h3>
-            <?php if ($mensagem): ?>
+            <?php if (isset($mensagem)): ?>
                 <div class="alert alert-danger mt-3 mb-3">
                     Dados Alterados com Sucesso !
                 </div>
-            <?php else: ?>
+            <?php elseif (isset($mensagem) && !$mensagem): ?>
                 <div class="alert alert-warning mt-3 mb-3">
                     Nenhuma alteração foi realizada.
                 </div>

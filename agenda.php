@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 <h2>Agendamentos</h2>
 <div class="d-flex justify-content-between mb-3">
-    <a href="novO_aGENDAMENTO.php" class="btn btn-success mb-3">Novo Agendamento</a>
+    <a href="novo_agendamento.php" class="btn btn-success mb-3">Novo Agendamento</a>
     <div class="ms-auto">
         <a href="pesquisar_agendamento.php" class="btn btn-primary">Pesquisar</a>
     </div>
