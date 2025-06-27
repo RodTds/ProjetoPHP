@@ -82,9 +82,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     <input value="<?= $projeto['fim'] ?>" type="date" id="fim" name="fim" class="form-control" required>
                 </div>
 
-                <div class="d-flex justify-content-between">
-                    <button type="submit" class="btn btn-primary">Salvar</button>
-                    <a href="projetos.php" class="btn btn-danger">Cancelar</a>
+                <div class="form-group d-flex justify-content-between mt-4">
+                    <button type="submit" class="btn btn-primary" style="width: 48%;">Salvar</button>
+                    <a href="projetos.php" class="btn btn-danger" style="width: 48%;">Cancelar</a>
                 </div>
             </form>
 

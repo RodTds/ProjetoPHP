@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         </div>
         <div class="d-grid gap-2">
           <button type="submit" class="btn btn-primary">Enviar</button>
-          <a href="index.php" class="btn btn-danger">Cancelar</a>
+          <a href="principal.php" class="btn btn-danger">Cancelar</a>
         </div>
       </form>
     </div>

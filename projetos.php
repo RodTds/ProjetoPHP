@@ -44,7 +44,8 @@ $projetos = retornaProjetos(); // variavel recebe o retorno da função que sao 
         <td><?= $data_formatada = (new DateTime($c['fim']))->format('d/m/Y') ?></td>
         <td>
           <a href="alterar_projeto.php?id=<?= $c['id'] ?>"class="btn btn-warning">Editar</a>
-          <a href="" class="btn btn-danger">Deletar</a>
+          <a href="deletar_projeto.php?id=<?= $c['id'] ?>" class="btn btn-danger">Deletar</a>
+
         </td>
       </tr>
     <?php

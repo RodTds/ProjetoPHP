@@ -20,7 +20,7 @@ function exibirAgendamentos()
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (\Throwable $th) {
-        echo "Erro ao Consultar Banco" . $th->getMessage();
+        echo "Erro ao Consultar Agendamentos" . $th->getMessage();
     }
 }
 
@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                  <td><?= $agendamento['observacoes']?></td>
                 <td>
                     <a href="alterar_agendamento.php?id=<?= $agendamento['id'] ?>" class="btn btn-warning">Editar</a>
-                    <a href="" class="btn btn-danger">Deletar</a>
+                    <a href="deletar_agendamento.php?id=<?= $agendamento['id'] ?>" class="btn btn-danger">Deletar</a>
                 </td>
             </tr>
         <?php

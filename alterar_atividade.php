@@ -1,10 +1,11 @@
 <?php
 require_once("cabecalho.php");
 
-function consultarAtividade($id) {
+function consultarAtividade($id)
+{
     require("conexao.php");
     try {
-        $sql = "SELECT a.idAtividade, a.descricao, p.nome AS nome, a.inicio, a.fim
+        $sql = "SELECT a.idAtividade, a.descricao, p.id AS idProjeto, p.nome AS nomeProjeto, a.inicio, a.fim
                 FROM atividades a
                 INNER JOIN projetos p ON a.idProjeto = p.id
                 WHERE a.idAtividade = ?";
@@ -16,101 +17,102 @@ function consultarAtividade($id) {
     }
 }
 
-function alterarAtividade($id, $descricao, $inicio, $fim) {
+function alterarAtividade($id, $descricao, $inicio, $fim, $idProjeto)
+{
     require("conexao.php");
     try {
-        $sql = "UPDATE atividades SET descricao = ?, inicio = ?, fim = ? WHERE idAtividade = ?";
+        $sql = "UPDATE atividades SET descricao = ?, inicio = ?, fim = ?, idProjeto = ? WHERE idAtividade = ?";
         $stmt = $pdo->prepare($sql);
-        return $stmt->execute([$descricao, $inicio, $fim, $id]);
+        return $stmt->execute([$descricao, $inicio, $fim, $idProjeto, $id]);
     } catch (Exception $e) {
         die("Erro ao alterar atividade: " . $e->getMessage());
     }
 }
 
-// Processamento
+function retornarProjetos()
+{
+    require("conexao.php");
+    try {
+        $sql = "SELECT id, nome FROM projetos";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $th) {
+        die("Erro ao consultar projetos: " . $th->getMessage());
+    }
+}
+
 $mensagem = null;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST["id"];
     $descricao = $_POST["descricao"];
     $inicio = $_POST["inicio"];
     $fim = $_POST["fim"];
+    $idProjeto = $_POST["projeto"];
 
-    if (alterarAtividade($id, $descricao, $inicio, $fim)) {
-        $mensagem = "Atividade alterada com sucesso!";
+    if (alterarAtividade($id, $descricao, $inicio, $fim, $idProjeto)) {
+        $mensagem = true;
     } else {
-        $mensagem = "Nenhuma alteração realizada.";
+        $mensagem = false;
     }
 
-    $atividade = consultarAtividade($id); // atualiza dados
+    $atividade = consultarAtividade($id);
 } else {
     $atividade = consultarAtividade($_GET['id']);
 }
+
+$projetos = retornarProjetos();
 ?>
 
-<!-- Estilo -->
-<style>
-    .card-container {
-        background-color: #fff;
-        border-radius: 15px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        padding: 30px;
-        margin-top: 40px;
-    }
-
-    .title-box {
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        margin-bottom: 25px;
-        text-align: center;
-    }
-
-    .btn-spacing {
-        margin-top: 15px;
-    }
-</style>
-
-<!-- Conteúdo -->
-<div class="container">
+<div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-8 card-container">
+        <div class="col-md-8 bg-white rounded-4 shadow p-5">
 
-            <div class="title-box">
-                <h2>Alterar Atividade</h2>
-            </div>
+            <h3 class="mb-4 text-center">Alterar Atividade</h3>
 
-            <?php if ($mensagem): ?>
-                <div class="alert alert-info"><?= $mensagem ?></div>
+            <?php if ($mensagem === true): ?>
+                <div class="alert alert-danger mt-3 mb-3">
+                    Dados Alterados com Sucesso!
+                </div>
+            <?php elseif ($mensagem === false): ?>
+                <div class="alert alert-warning mt-3 mb-3">
+                    Nenhuma alteração foi realizada.
+                </div>
             <?php endif; ?>
 
             <form method="POST">
                 <input type="hidden" name="id" value="<?= $atividade['idAtividade'] ?>">
 
-                <div class="form-group">
-                    <label for="descricao">Descrição da Atividade</label>
-                    <input value="<?= $atividade['descricao'] ?>" type="text" class="form-control" id="descricao" name="descricao" required>
+                <div class="mb-3">
+                    <label for="descricao" class="form-label">Descrição da Atividade</label>
+                    <input value="<?= htmlspecialchars($atividade['descricao']) ?>" type="text" id="descricao" name="descricao" class="form-control" required>
                 </div>
 
-                <div class="form-group">
-                    <label for="inicio">Data de Início</label>
-                    <input value="<?= $atividade['inicio'] ?>" type="date" class="form-control" id="inicio" name="inicio" required>
+                <div class="mb-3">
+                    <label for="inicio" class="form-label">Data de Início</label>
+                    <input value="<?= $atividade['inicio'] ?>" type="date" id="inicio" name="inicio" class="form-control" required>
                 </div>
 
-                <div class="form-group">
-                    <label for="fim">Data de Fim</label>
-                    <input value="<?= $atividade['fim'] ?>" type="date" class="form-control" id="fim" name="fim" required>
+                <div class="mb-3">
+                    <label for="fim" class="form-label">Data de Fim</label>
+                    <input value="<?= $atividade['fim'] ?>" type="date" id="fim" name="fim" class="form-control" required>
                 </div>
 
-                <div class="form-group">
-                    <label for="idprojeto">Projeto</label>
-                    <input value="<?= $atividade['nome'] ?>" type="text" class="form-control" id="idprojeto" name="idprojeto" readonly>
+                <div class="mb-3">
+                    <label for="projeto" class="form-label">Projeto</label>
+                    <select class="form-control" id="projeto" name="projeto" required>
+                        <option value="">Selecione o Projeto</option>
+                        <?php foreach ($projetos as $projeto): ?>
+                            <option value="<?= $projeto['id'] ?>" <?= ($projeto['id'] == $atividade['idProjeto']) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($projeto['nome']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
 
-                <div class="d-flex flex-column">
-                    <button type="submit" class="btn btn-success btn-block">Salvar Alterações</button>
-                    <a href="atividades.php" class="btn btn-secondary btn-block btn-spacing">Cancelar</a>
-                    <a href="projetos.php" class="btn btn-primary btn-block btn-spacing">Ver Projetos</a>
+                <div class="form-group d-flex justify-content-between mt-4">
+                    <button type="submit" class="btn btn-primary" style="width: 48%;">Salvar</button>
+                    <a href="atividades.php" class="btn btn-danger" style="width: 48%;">Cancelar</a>
                 </div>
             </form>
 

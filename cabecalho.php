@@ -1,4 +1,6 @@
 <?php
+ob_start(); // perguntar porque isso eliminou o problema na hora de 
+// gravar no banco onde chama o header na pagina alterar_agendamento e colocar no final tb rodape.php
 session_start();
 if (!$_SESSION['acesso']) {
     header('location: index.php?mensagem=acesso_negado');
@@ -75,6 +77,16 @@ if (!$_SESSION['acesso']) {
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="agenda.php">Listar Agendamentos</a></li>
                             <li><a class="dropdown-item" href="novo_agendamento.php">Novo Agendamento</a></li>
+                        </ul>
+                    </li>
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Dashboards
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="dashboard_atividades.php">Dashboard Atividades</a></li>
+                            <li><a class="dropdown-item" href="novo_agendamento.php">Dashboard Agendamentos</a></li>
                         </ul>
                     </li>
                         <!--SweetAlert-->

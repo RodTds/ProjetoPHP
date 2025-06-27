@@ -1,21 +1,21 @@
 <?php
-ob_start(); // PERGUNTAR PARA PROFESSORA E O DO FIM DA PAGINA TAMBEM
+ob_start();
 require("cabecalho.php");
 
 function consultarAtividade($id)
 {
     require("conexao.php");
-        try{
+    try {
         $sql = "SELECT a.idAtividade,a.descricao,p.nome AS nome,a.inicio,a.fim
          FROM atividades a
          INNER JOIN projetos p ON a.idProjeto = p.id
          WHERE a.idAtividade = ? ";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);  
-        }catch(PDOException $e) {
-        echo"Erro ao consultar Banco Tabela atividades".$e->getMessage();  
-        }
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        echo "<div class='alert alert-danger'>Erro ao consultar Banco Tabela atividades: " . $e->getMessage() . "</div>";
+    }
 }
 
 function excluirAtividade($id)
@@ -26,127 +26,77 @@ function excluirAtividade($id)
         $stmt = $pdo->prepare($sql);
         if ($stmt->execute([$id])) {
             header('location: atividades.php');
+            exit;
         } else {
             header('location: atividades.php');
+            exit;
         }
     } catch (PDOException $th) {
         if ($th->getCode() === '23000') {
-            die('<div style="color: red; background-color: #ffe6e6; padding: 15px; border: 1px solid red; border-radius: 5px;">
+            die('<div class="alert alert-danger p-3 rounded">
                     <strong>Erro:</strong> Não é possível excluir a atividade porque ela está relacionada a outro registro.
-                    <br><a class="btn btn-primary" href="atividades.php">Voltar</a>
+                    <br><a class="btn btn-primary mt-3" href="atividades.php">Voltar</a>
                 </div>');
         } else {
-            die('<div style="color: red;">Erro ao Excluir Atividade: ' . $th->getMessage() . '</div>');
+            die('<div class="alert alert-danger">Erro ao Excluir Atividade: ' . $th->getMessage() . '</div>');
         }
     }
-    
-    
 }
-if($_SERVER["REQUEST_METHOD"] == "POST"){
-    $id = $_POST['id'] ;
-  excluirAtividade($id);
-}else{
-$resultados = consultarAtividade( $_GET['id']);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id = $_POST['id'];
+    excluirAtividade($id);
+} else {
+    $resultados = consultarAtividade($_GET['id']);
 }
 ?>
 
-<style>
-    .centered-wrapper {
-        background-color: #f0f2f5;
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        flex-direction: column;
-    }
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 form-container bg-white p-4 rounded shadow">
+            <h2 class="text-center mb-4">Excluir Atividade</h2>
+            <form method="post">
+                <div class="form-group mb-3">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        value="<?= htmlspecialchars($resultados['idAtividade']) ?>" readonly>
+                </div>
 
-    .form-container {
-        background-color: white;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        max-width: 500px;
-    }
+                <div class="form-group mb-3">
+                    <label for="descricao">Descrição</label>
+                    <input type="text" class="form-control" id="descricao" name="descricao"
+                        value="<?= htmlspecialchars($resultados['descricao']) ?>" readonly>
+                </div>
 
-    h2 {
-        text-align: center; /* Centralizando o título */
-    }
+                <div class="form-group mb-3">
+                    <label for="idprojeto">Projeto</label>
+                    <input type="text" class="form-control" id="idprojeto" name="idprojeto"
+                        value="<?= htmlspecialchars($resultados['nome']) ?>" readonly>
+                </div>
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+                <div class="form-group mb-3">
+                    <label for="inicio">Início</label>
+                    <input type="text" class="form-control" id="inicio" name="inicio"
+                        value="<?= (new DateTime($resultados['inicio']))->format('d/m/Y') ?>" readonly>
+                </div>
 
-    table, th, td {
-        border: 1px solid #ddd;
-    }
+                <div class="form-group mb-4">
+                    <label for="fim">Fim</label>
+                    <input type="text" class="form-control" id="fim" name="fim"
+                        value="<?= (new DateTime($resultados['fim']))->format('d/m/Y') ?>" readonly>
+                </div>
 
-    th, td {
-        padding: 12px;
-        text-align: left;
-    }
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-danger">Deletar</button>
+                    <a href="atividades.php" class="btn btn-secondary">Cancelar</a>
+                </div>
 
-    tr:nth-child(even) {
-        background-color: #f2f2f2; /* Cinza claro */
-    }
-
-    tr:nth-child(odd) {
-        background-color: #fff; /* Branco */
-    }
-
-    .btn-danger {
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-        width: 100%;
-        border-radius: 5px;
-        font-size: 16px;
-    }
-
-    .btn-danger:hover {
-        background-color: #c82333;
-    }
-</style>
-
-<div class="centered-wrapper">
-<div class="form-container" style="margin-bottom: 20px;">
-        <h2>Excluir Atividades</h2>
+            </form>
+        </div>
     </div>
-    <form method="post" class="form-container">
-        <table>
-            <tr>
-                <th>ID</th>
-                <td><input value="<?= $resultados['idAtividade'] ?>" type="text" id="id" name="id" class="form-control" readonly></td>
-            </tr>
-            <tr>
-                <th>DESCRIÇÃO</th>
-                <td><input value="<?= $resultados['descricao'] ?>" type="text" id="descricao" name="descricao" class="form-control" readonly></td>
-            </tr>
-            <tr>
-                <th>PROJETO</th>
-                <td><input value="<?= $resultados['nome'] ?>" type="text" id="idprojeto" name="idprojeto" class="form-control" readonly></td>
-            </tr>
-            <tr>
-                <th>INÍCIO</th>
-                <td><input value="<?= (new DateTime($resultados['inicio']))->format('d/m/Y') ?>" type="text" id="inicio" name="inicio" class="form-control" readonly></td>
-            </tr>
-            <tr>
-                <th>FIM</th>
-                <td><input value="<?= (new DateTime($resultados['fim']))->format('d/m/Y') ?>" type="text" id="fim" name="fim" class="form-control" readonly></td>
-            </tr>
-        </table>
-        <button type="submit" class="btn btn-danger">Deletar</button>
-        <a href="atividades.php" class="btn btn-primary" style="margin-top: 10px; display: block; text-align: center;">
-    Cancelar
-</a>
-    </form>
 </div>
 
 <?php
-ob_end_flush(); 
+ob_end_flush();
 require("rodape.php");
 ?>

@@ -27,50 +27,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário de Cadastro</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .form-container {
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-        .btn-custom {
-            background-color: #007bff;
-            color: white;
-        }
-        .btn-custom:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-6 form-container">
-            <h2 class="text-center">Cadastro de Atividade</h2>
+        <div class="col-md-6 bg-white shadow p-4 rounded mt-5">
+            <h2 class="text-center mb-4">Cadastro de Atividade</h2>
             <form method="POST">
                 <div class="form-group">
                     <label for="descricao">Descrição da Atividade</label>
-                    <input type="text" class="form-control" id="descricao" name="descricao" required>
+                    <input type="text" class="form-control rounded" id="descricao" name="descricao" required>
                 </div>
 
                 <div class="form-group">
                     <label for="idprojeto">Projeto Relacionado</label>
-                    <select class="form-control" id="idprojeto" name="idprojeto" required>
+                    <select class="form-control rounded" id="idprojeto" name="idprojeto" required>
                         <option value="">Selecione um Projeto</option>
                         <?php foreach ($projetos as $projeto): ?>
-                            <option value="<?= $projeto['id'] ?>">
+                            <option value="<?= htmlspecialchars($projeto['id']) ?>">
                                 <?= htmlspecialchars($projeto['nome']) ?>
                             </option>
                         <?php endforeach; ?>
@@ -79,24 +51,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <div class="form-group">
                     <label for="inicio">Data de Início</label>
-                    <input type="date" class="form-control" id="inicio" name="inicio" required>
+                    <input type="date" class="form-control rounded" id="inicio" name="inicio" required>
                 </div>
 
                 <div class="form-group">
                     <label for="fim">Data de Fim</label>
-                    <input type="date" class="form-control" id="fim" name="fim" required>
+                    <input type="date" class="form-control rounded" id="fim" name="fim" required>
                 </div>
 
-                <button type="submit" class="btn btn-custom btn-block">Salvar Atividade</button>
+                <div class="d-grid gap-2 mt-3">
+                    <button type="submit" class="btn btn-primary btn-block">Salvar Atividade</button>
+                    <a href="atividades.php" class="btn btn-danger btn-block">Cancelar</a>
+                </div>
             </form>
         </div>
     </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
 
 <?php require_once("rodape.php"); ?>

@@ -46,7 +46,7 @@ $voluntarios = retornaVoluntarios(); // variavel recebe o retorno da função qu
         <td><?= $c['telefone'] ?></td>
         <td>
           <a href="alterar_voluntario.php?id=<?= $c['id'] ?>" class="btn btn-warning">Editar</a>
-          <a href="" class="btn btn-danger">Deletar</a>
+          <a href="deletar_voluntario.php?id=<?= $c['id']?>" class="btn btn-danger">Deletar</a>
         </td>
       </tr>
       <?php

@@ -44,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
 }
 $voluntario = retornaDadosVoluntario();
+
 ?>
 
 <div class="container mt-5">
@@ -78,33 +79,8 @@ $voluntario = retornaDadosVoluntario();
                 </div>
 
                 <div class="d-flex justify-content-between">
-                    <button type="submit" class="btn btn-primary">Salvar</button>
-                    <a href="voluntarios.php" class="btn btn-danger">Cancelar</a>
-                </div>
-            </form>
-
-            <hr class="my-4">
-
-            <h3 class="mb-4 text-center">Alteração da Senha</h3>
-            <form method="post">
-                <div class="mb-3">
-                    <label for="senha_antiga" class="form-label">Informe a senha antiga</label>
-                    <input type="password" id="senha_antiga" name="senha_antiga" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="nova_senha" class="form-label">Informe a nova senha</label>
-                    <input type="password" id="nova_senha" name="nova_senha" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="nova_senha_confirm" class="form-label">Repita a nova senha</label>
-                    <input type="password" id="nova_senha_confirm" name="nova_senha_confirm" class="form-control" required>
-                </div>
-
-                <div class="d-flex justify-content-between">
-                    <button type="submit" class="btn btn-primary">Salvar</button>
-                    <a href="voluntarios.php" class="btn btn-danger">Cancelar</a>
+                    <button type="submit" class="btn btn-primary" style="width: 48%;">Salvar</button>
+                    <a href="voluntarios.php" class="btn btn-danger" style="width: 48%;">Cancelar</a>
                 </div>
             </form>
         </div>

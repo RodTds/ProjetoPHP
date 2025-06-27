@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 <div class="d-flex justify-content-between mb-3">
     <a href="nova_atividade.php" class="btn btn-success mb-3">Novo Registro</a>
     <div class="ms-auto">
-        <a href="pesquisar_projeto.php" class="btn btn-primary">Pesquisar</a>
+        <a href="pesquisar_atividade.php" class="btn btn-primary">Pesquisar</a>
     </div>
 </div>
 <table class="table table-hover table-striped">
